@@ -1,0 +1,21 @@
+# Keil / ARM
+*.uvoptx
+*.uvguix.*
+*.crf
+*.d
+*.o
+*.dep
+*.lnp
+*.sct
+*.htm
+*.build_log.htm
+*.map
+*.lst
+*.iex
+# Build outputs
+Listings/
+Objects/
+DebugConfig/
+# Temp
+*.bak
+*.ps1
