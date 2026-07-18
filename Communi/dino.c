@@ -38,7 +38,7 @@ void Show_Ground(void)
 		}
 	}
 	
-}//ѭ��256�����?
+}//
 
 uint8_t barrier_flag;
 uint8_t Barrier_Pos;
@@ -58,7 +58,7 @@ void Show_Barrier(void)
 	barrier.maxX=143-Barrier_Pos;
 	barrier.minY=44;
 	barrier.maxY=62;
-}//143��ˢ��һ���ϰ�
+}//
 
 uint8_t Cloud_Pos;
 void Show_Cloud(void)
@@ -66,7 +66,7 @@ void Show_Cloud(void)
 	OLED_ShowImage(127-Cloud_Pos,9,16,8,Cloud);
 }
 
-uint8_t dino_jump_flag=0;//0:���ܣ�1:��Ծ
+uint8_t dino_jump_flag=0;//
 extern uint8_t Key_Num;
 uint16_t jump_t;
 uint8_t Jump_Pos;
@@ -95,7 +95,7 @@ void Show_Dino(void)
 	dino.maxX=16;
 	dino.minY=44-Jump_Pos;
 	dino.maxY=62-Jump_Pos;
-}//��Ծ����·Ч��չʾ
+}
 
 int isColliding(struct Object_Position *a,struct Object_Position *b)
 {
@@ -110,7 +110,7 @@ int isColliding(struct Object_Position *a,struct Object_Position *b)
 		return 1;
 	}
 	return 0;
-}//�����ж�
+}//
 
 void Dino_Tick(void)
 {

@@ -5,7 +5,7 @@
 #include "menu.h"
 
 uint8_t Key_Num,Rse1_flag,Rse2_flag,Rse3_flag,Rse5_flag,Rse7_flag,lcd_mode,time_cg,MPU_S,mpu_flag;
-
+uint8_t Rse8_flag;
 
 void Key_Init(void)
 {
@@ -228,6 +228,10 @@ void Key_scan_UI4(uint8_t KeyNum)
 			{
 				lcd_mode=7;
 			}
+			else if(target_selection==4)
+			{
+				lcd_mode=8;
+			}
 			break;
 	}
 }
@@ -304,6 +308,22 @@ void Key_scan_UI7(uint8_t KeyNum)
 	}
 }
 
+void Key_scan_UI8(uint8_t KeyNum)
+{
+	switch(KeyNum)
+	{
+		case 1:
+			Rse8_flag^=1;
+			break;
+		case 3:
+			if(Rse8_flag==0)
+			{
+			lcd_mode=4;
+			}
+		break;
+	}
+}
+
 void Key_scan(void)
 {
 	uint8_t KeyNum=Key_GetNum();
@@ -333,6 +353,9 @@ void Key_scan(void)
 			break;
 		case 7:
 			Key_scan_UI7(KeyNum);
+			break;
+		case 8:
+			Key_scan_UI8(KeyNum);
 			break;
 	}
 }

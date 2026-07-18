@@ -341,6 +341,28 @@ void LCD_show_UI7(void)
 	OLED_Update();
 }
 
+void Show_Game_UI(void)
+{
+	OLED_ShowImage(0,0,16,16,Return);
+	OLED_ShowString(0,16,"π»∏Ë–°ø÷¡˙",OLED_8X16);
+}
+
+void LCD_show_UI8(void)
+{
+	OLED_Clear();
+	Show_Game_UI();
+	switch(Rse8_flag)
+	{
+		case 0:
+			OLED_ReverseArea(0,0,16,16);
+		break;
+		case 1:
+			OLED_ReverseArea(0,16,40,16);
+		break;
+	}
+	OLED_Update();
+}
+
 void LCD_show(void)
 {
 	Key_scan();
@@ -370,6 +392,9 @@ void LCD_show(void)
 			break;
 		case 7:
 			LCD_show_UI7();
+			break;
+		case 8:
+			LCD_show_UI8();
 			break;
 	}
 }
