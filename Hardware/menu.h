@@ -13,6 +13,7 @@ void LCD_show_UI4(void);
 void LCD_show_UI5(void);
 void LCD_show_UI6(void);
 void LCD_show_UI7(void);
+void LCD_show_UI8(void);
 void Menu_Animation(void);
 void MPU6050_Calculation(void);
 void Show_MPU6050_UI(void);

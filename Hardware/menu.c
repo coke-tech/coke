@@ -7,6 +7,9 @@
 #include "Setime.h"
 #include "LED.h"
 #include "MPU6050.h"
+#include "dino.h"
+#include "delay.h"
+#include "AD.h"
 
 void comInit(void)
 {
@@ -15,11 +18,39 @@ void comInit(void)
 	Timer_Init();
 	LED_Init();
 	MPU6050_Init();
+	AD_Init();
 }
+
+uint16_t ADValue;
+float VBAT;
+int Battery_Capacity;
+
+void Show_Battery(void)
+{
+	int sum;
+	for(int i=0;i<3000;i++)
+	{
+		ADValue=AD_GetValue();
+		sum+=ADValue;
+		
+	}
+	ADValue=sum/3000;
+	VBAT=(float)ADValue/4095*3.3;
+	Battery_Capacity=(ADValue-3276)*100/819;
+	if(Battery_Capacity<0)Battery_Capacity=0;
+	
+	OLED_ShowNum(64,0,ADValue,4,OLED_6X8);
+	OLED_Printf(64,8,OLED_6X8,"VBAT:%.2f",VBAT);
+	
+	
+	
+};
+
 
 void Show_Clock_UI(void)
 {
 	MyRTC_ReadTime();
+	Show_Battery();
 	OLED_Printf(0,0,OLED_6X8,"%d-%d-%d",MyRTC_Time[0],MyRTC_Time[1],MyRTC_Time[2]);
 	OLED_Printf(16,16,OLED_12X24,"%02d:%02d:%02d",MyRTC_Time[3],MyRTC_Time[4],MyRTC_Time[5]);
 	OLED_ShowString(0,48,"²Ëµ¥",OLED_8X16);
@@ -349,17 +380,70 @@ void Show_Game_UI(void)
 
 void LCD_show_UI8(void)
 {
+		OLED_Clear();
+		Show_Game_UI();
+
+		if(Rse8_flag == 0)
+		{
+			OLED_ReverseArea(0, 0, 16, 16);
+		}
+		else
+		{
+			OLED_ReverseArea(0, 16, 80, 16);
+		}
+		OLED_Update();
+}
+
+void LCD_show_UI9(void)
+{
 	OLED_Clear();
-	Show_Game_UI();
-	switch(Rse8_flag)
+	if(DinoGame_Animation())
 	{
-		case 0:
-			OLED_ReverseArea(0,0,16,16);
-		break;
-		case 1:
-			OLED_ReverseArea(0,16,40,16);
-		break;
+		lcd_mode=8;
 	}
+	OLED_Update();
+}
+
+
+
+void LCD_show_UI10(void)
+{
+	/*±ÕÑÛ*/
+	for(uint8_t i=0;i<3;i++)
+	{
+		OLED_Clear();
+		OLED_ShowImage(30,10+i,16,16,Eyebrow[0]);//×óÃ¼Ã«
+		OLED_ShowImage(82,10+i,16,16,Eyebrow[1]);//ÓÒÃ¼Ã«
+		OLED_DrawEllipse(40,32,6,6-i,1);//×óÑÛ
+		OLED_DrawEllipse(88,32,6,6-i,1);//ÓÒÑÛ
+		OLED_ShowImage(54,40,20,20,Mouth);
+		OLED_Update();
+		Delay_ms(100);
+	}
+	
+	/*ÕöÑÛ*/
+	for(uint8_t i=0;i<3;i++)
+	{
+		OLED_Clear();
+		OLED_ShowImage(30,12-i,16,16,Eyebrow[0]);//×óÃ¼Ã«
+		OLED_ShowImage(82,12-i,16,16,Eyebrow[1]);//ÓÒÃ¼Ã«
+		OLED_DrawEllipse(40,32,6,4+i,1);//×óÑÛ
+		OLED_DrawEllipse(88,32,6,4+i,1);//ÓÒÑÛ
+		OLED_ShowImage(54,40,20,20,Mouth);
+		OLED_Update();
+		Delay_ms(100);
+	}
+	
+	Delay_ms(500);
+	
+}
+
+void LCD_show_UI11(void)
+{
+	OLED_Clear();
+	MPU6050_Calculation();
+	OLED_DrawCircle(64,32,30,0);
+	OLED_DrawCircle(64-Roll,32+Pitch,4,1);
 	OLED_Update();
 }
 
@@ -396,5 +480,19 @@ void LCD_show(void)
 		case 8:
 			LCD_show_UI8();
 			break;
+		case 9:
+			LCD_show_UI9();
+			break;
+		case 10:
+			LCD_show_UI10();
+			break;
+		case 11:
+			LCD_show_UI11();
+			break;
 	}
 }
+
+
+
+
+

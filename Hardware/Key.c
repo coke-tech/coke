@@ -2,9 +2,10 @@
 #include "DELAY.h"
 #include "Setime.h"
 #include "LED.h"
+#include "dino.h"
 #include "menu.h"
 
-uint8_t Key_Num,Rse1_flag,Rse2_flag,Rse3_flag,Rse5_flag,Rse7_flag,lcd_mode,time_cg,MPU_S,mpu_flag;
+uint8_t Key_Num,Rse1_flag,Rse2_flag,Rse3_flag,Rse5_flag,Rse7_flag,Rse8_flag,lcd_mode,time_cg,MPU_S,mpu_flag,dino_game_active;
 uint8_t Rse8_flag;
 
 void Key_Init(void)
@@ -232,6 +233,14 @@ void Key_scan_UI4(uint8_t KeyNum)
 			{
 				lcd_mode=8;
 			}
+			else if(target_selection==5)
+			{
+				lcd_mode=10;
+			}
+			else if(target_selection==6)
+			{
+				lcd_mode=11;mpu_flag=1;
+			}
 			break;
 	}
 }
@@ -259,7 +268,6 @@ void Key_scan_UI5(uint8_t KeyNum)
 		break;
 	}
 }
-
 
 void Key_scan_UI6(uint8_t KeyNum)
 {
@@ -310,16 +318,52 @@ void Key_scan_UI7(uint8_t KeyNum)
 
 void Key_scan_UI8(uint8_t KeyNum)
 {
+
 	switch(KeyNum)
 	{
 		case 1:
-			Rse8_flag^=1;
+			Rse8_flag ^= 1;
 			break;
 		case 3:
-			if(Rse8_flag==0)
+			if(Rse8_flag == 0)
 			{
-			lcd_mode=4;
+				lcd_mode = 4;
 			}
+			else
+			{
+				DinoGame_Pos_Init();
+				lcd_mode=9;
+			}
+			break;
+	}
+}
+
+void Key_scan_UI9(uint8_t KeyNum)
+{
+	switch(KeyNum)
+	{
+		case 1:
+			dino_jump_flag=1;
+		break;
+	}
+}
+
+void Key_scan_UI10(uint8_t KeyNum)
+{
+	switch(KeyNum)
+	{
+		case 3:
+			lcd_mode=4;
+		break;
+	}
+}
+
+void Key_scan_UI11(uint8_t KeyNum)
+{
+	switch(KeyNum)
+	{
+		case 3:
+			lcd_mode=4;
 		break;
 	}
 }
@@ -357,8 +401,19 @@ void Key_scan(void)
 		case 8:
 			Key_scan_UI8(KeyNum);
 			break;
+		case 9:
+			Key_scan_UI9(KeyNum);
+			break;
+		case 10:
+			Key_scan_UI10(KeyNum);
+			break;
+		case 11:
+			Key_scan_UI11(KeyNum);
+			break;
 	}
 }
+
+
 
 void TIM2_IRQHandler(void)
 {
@@ -367,6 +422,10 @@ void TIM2_IRQHandler(void)
 		Key_Tick();
 		if(mpu_flag) MPU_S++;
 		StopWatch_Tick();
+		Dino_Tick();
 		TIM_ClearITPendingBit(TIM2,TIM_IT_Update);
 	}
 }
+
+
+

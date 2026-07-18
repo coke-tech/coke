@@ -785,6 +785,16 @@
               <FileType>5</FileType>
               <FilePath>.\Communi\dino.h</FilePath>
             </File>
+            <File>
+              <FileName>AD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Communi\AD.c</FilePath>
+            </File>
+            <File>
+              <FileName>AD.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Communi\AD.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

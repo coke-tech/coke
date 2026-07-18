@@ -4,11 +4,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include "Delay.h"
+#include "dino.h"
 
 
-struct Object_Position{
-	uint8_t minX,minY,maxX,maxY;
-};
 int Score;
 void Show_Score(void)
 {
@@ -76,8 +74,7 @@ struct Object_Position dino;
 
 void Show_Dino(void)
 {
-	Key_Num=Key_GetNum();
-	if(Key_Num==1)dino_jump_flag=1;
+	
 	Jump_Pos=28*sin((float)(pi*jump_t/1000));
 	
 	if(dino_jump_flag==0)
@@ -153,23 +150,22 @@ void Dino_Tick(void)
 
 }
 
-void DinoGame_Animation(void)
+int DinoGame_Animation(void)
 {
-		
-		OLED_Clear();
-		Show_Score();
-		Show_Ground();
-		Show_Barrier();
-		Show_Cloud();
-		Show_Dino();
-		OLED_Update();
-		
-		
-	
-	
+	Dino_Tick();
+	OLED_Clear();
+	Show_Score();
+	Show_Ground();
+	Show_Barrier();
+	Show_Cloud();
+	Show_Dino();
+	OLED_Update();
+	return isColliding(&dino, &barrier);
 }
 
 void DinoGame_Pos_Init(void)
 {
 	Score=Ground_Pos=Barrier_Pos=Cloud_Pos=Jump_Pos=0;
 }
+
+
